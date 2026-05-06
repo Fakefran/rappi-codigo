@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Código de Barras</title>
+
+  <!-- Librería -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #fff5f0;
+      text-align: center;
+    }
+
+    header {
+      background-color: #ff441f;
+      color: white;
+      padding: 20px;
+    }
+
+    input {
+      margin: 10px;
+      padding: 10px;
+      width: 250px;
+      border: 2px solid #ff441f;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #ff441f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .etiqueta {
+      margin: 30px auto;
+      padding: 20px;
+      width: 320px;
+      background: white;
+      border: 2px dashed #ff441f;
+    }
+
+    #error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>Generador de Código de Barras</h2>
+  <div>Esta página tardó 10 minutos en hacerse</div>
+</header>
+
+<input type="text" id="sku" placeholder="Ingresar SKU">
+<br>
+<input type="text" id="nombre" placeholder="Nombre del producto">
+<br>
+
+<button onclick="generar()">Generar</button>
+
+<div id="error"></div>
+
+<div class="etiqueta">
+  <svg id="barcode"></svg>
+  <div id="nombreProducto"></div>
+</div>
+
+<script>
+function generar() {
+  const sku = document.getElementById("sku").value.trim();
+  const nombre = document.getElementById("nombre").value.trim();
+  const error = document.getElementById("error");
+
+  error.innerText = "";
+
+  if (!sku) {
+    error.innerText = "⚠️ Tenés que ingresar un SKU";
+    return;
+  }
+
+  try {
+    JsBarcode("#barcode", sku, {
+      format: "CODE128",
+      width: 2,
+      height: 80,
+      displayValue: true
+    });
+
+    document.getElementById("nombreProducto").innerText = nombre;
+
+  } catch (e) {
+    error.innerText = "Error generando el código de barras";
+    console.error(e);
+  }
+}
+</script>
+
+</body>
+</html>
